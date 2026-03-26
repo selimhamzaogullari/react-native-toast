@@ -1,6 +1,6 @@
 {
   "name": "@selimh/react-native-toast",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A beautifully animated, highly customizable, imperative Toast library for React Native.",
   "keywords": [
     "react-native",
