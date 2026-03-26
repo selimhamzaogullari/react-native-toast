@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   useColorScheme,
 } from 'react-native';
-import { ToastProvider, Toast } from 'react-native-toast';
+import { ToastProvider, Toast } from '@selimh/react-native-toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-toast": ["./src/index"]
+      "@selimh/react-native-toast": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
