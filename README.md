@@ -1,4 +1,4 @@
-# react-native-toast
+# @selimh/react-native-toast
 
 A beautifully animated, highly customizable, and imperative Toast library for React Native based on `react-native-reanimated`.
 
@@ -7,9 +7,9 @@ A beautifully animated, highly customizable, and imperative Toast library for Re
 ## Installation
 
 ```sh
-npm install react-native-toast
+npm install @selimh/react-native-toast
 # or
-yarn add react-native-toast
+yarn add @selimh/react-native-toast
 ```
 
 You also need to install the peer dependencies:
@@ -25,7 +25,7 @@ yarn add react-native-reanimated react-native-safe-area-context
 1. Wrap your root directory with `ToastProvider`:
 
 ```tsx
-import { ToastProvider } from 'react-native-toast';
+import { ToastProvider } from '@selimh/react-native-toast';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
@@ -46,7 +46,7 @@ export default function App() {
 2. Call `Toast.show` from anywhere in your app:
 
 ```tsx
-import { Toast } from 'react-native-toast';
+import { Toast } from '@selimh/react-native-toast';
 
 Toast.show({
   type: 'success',
@@ -58,7 +58,7 @@ Toast.show({
 ```
 
 ### Dark Mode (Theme) Support
-`react-native-toast` perfectly supports light and dark modes out of the box. 
+`@selimh/react-native-toast` perfectly supports light and dark modes out of the box. 
 
 1. **System Dependant (Default):** If you pass `theme="system"` to `ToastProvider` or omit it, the toast will automatically adapt to the user's iOS/Android theme.
 2. **Forced Theme:** You can override the theme dynamically on a per-toast basis:
