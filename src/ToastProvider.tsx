@@ -1,10 +1,13 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Toast } from './Toast';
-import type { ToastOptions, ToastRef } from './types';
+import type { ToastOptions, ToastRef, ToastProviderProps } from './types';
 
 export const ToastRefWrapper = React.createRef<ToastRef>();
 
-export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+export const ToastProvider = ({
+  children,
+  theme = 'system',
+}: ToastProviderProps) => {
   const [options, setOptions] = useState<ToastOptions>({});
   const [isVisible, setIsVisible] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -52,6 +55,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
         {...options}
         isVisible={isVisible}
         onAnimationEnd={onAnimationEnd}
+        providerTheme={theme}
       />
     </>
   );

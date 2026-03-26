@@ -1,8 +1,8 @@
-import type React from 'react';
-
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 export type ToastPosition = 'top' | 'bottom';
+
+export type ToastTheme = 'light' | 'dark' | 'system';
 
 export interface ToastOptions {
   type?: ToastType;
@@ -14,6 +14,7 @@ export interface ToastOptions {
   bottomOffset?: number;
   visibilityTime?: number;
   autoHide?: boolean;
+  theme?: ToastTheme;
   onPress?: () => void;
   onShow?: () => void;
   onHide?: () => void;
@@ -22,7 +23,13 @@ export interface ToastOptions {
 
 export interface ToastProps extends ToastOptions {
   isVisible: boolean;
+  providerTheme?: ToastTheme;
   onAnimationEnd: (isVisible: boolean) => void;
+}
+
+export interface ToastProviderProps {
+  children: React.ReactNode;
+  theme?: ToastTheme;
 }
 
 export interface ToastRef {

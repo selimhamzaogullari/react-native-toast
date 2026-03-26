@@ -2,6 +2,8 @@
 
 A beautifully animated, highly customizable, and imperative Toast library for React Native based on `react-native-reanimated`.
 
+![Image](https://github.com/user-attachments/assets/3e9910ab-0b8a-468e-a778-79ea0d53c525)
+
 ## Installation
 
 ```sh
@@ -29,7 +31,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 export default function App() {
   return (
     <SafeAreaProvider>
-      <ToastProvider>
+      {/* 
+        theme can be 'light', 'dark', or 'system' (default: 'system')
+        It will automatically detect user's device preferences.
+      */}
+      <ToastProvider theme="system">
         {/* Your app components */}
       </ToastProvider>
     </SafeAreaProvider>
@@ -51,6 +57,19 @@ Toast.show({
 });
 ```
 
+### Dark Mode (Theme) Support
+`react-native-toast` perfectly supports light and dark modes out of the box. 
+
+1. **System Dependant (Default):** If you pass `theme="system"` to `ToastProvider` or omit it, the toast will automatically adapt to the user's iOS/Android theme.
+2. **Forced Theme:** You can override the theme dynamically on a per-toast basis:
+```tsx
+Toast.show({
+  type: 'info',
+  theme: 'dark', // 'light' | 'dark' | 'system'
+  text1: 'Always Dark',
+});
+```
+
 ## APIs
 
 ### `Toast.show(options: ToastOptions)`
@@ -61,9 +80,15 @@ Toast.show({
 | `text1` | `string` | `undefined` | Primary text |
 | `text2` | `string` | `undefined` | Secondary description |
 | `position` | `'top' \| 'bottom'` | `'top'` | Position of the toast |
+| `theme` | `'light' \| 'dark' \| 'system'` | `'system'` | Toast visual theme |
 | `visibilityTime` | `number` | `3000` | Duration in ms |
 | `topOffset` | `number` | `40` | Offset from top edge |
 | `bottomOffset` | `number` | `40` | Offset from bottom edge |
+| `autoHide` | `boolean` | `true` | If false, toast will not hide automatically |
+| `customView` | `React.ReactNode` | `undefined` | Render a completely custom component |
+| `onPress` | `() => void` | `undefined` | Called when toast is tapped |
+| `onShow` | `() => void` | `undefined` | Called when animation finishes showing |
+| `onHide` | `() => void` | `undefined` | Called when animation finishes hiding |
 
 ### `Toast.hide()`
 Hides the currently visible toast.
