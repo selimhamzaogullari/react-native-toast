@@ -1,7 +1,17 @@
 {
-  "name": "react-native-toast",
+  "name": "@selimh/react-native-toast",
   "version": "0.1.0",
-  "description": " Toast component for React Nativege component for React Native.",
+  "description": "A beautifully animated, highly customizable, imperative Toast library for React Native.",
+  "keywords": [
+    "react-native",
+    "react-native-toast",
+    "toast",
+    "reanimated",
+    "alert",
+    "notification",
+    "snackbar",
+    "toast-message"
+  ],
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
   "exports": {
@@ -40,11 +50,6 @@
     "test": "jest",
     "release": "release-it --only-version"
   },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/selimhamzaogullari/react-native-toast.git"
@@ -56,7 +61,8 @@
   },
   "homepage": "https://github.com/selimhamzaogullari/react-native-toast#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.8.1",
