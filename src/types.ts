@@ -15,6 +15,7 @@ export interface ToastOptions {
   visibilityTime?: number;
   autoHide?: boolean;
   theme?: ToastTheme;
+  animationType?: 'spring' | 'slide' | 'fade';
   onPress?: () => void;
   onShow?: () => void;
   onHide?: () => void;

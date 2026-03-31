@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   useColorScheme,
+  Platform,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -30,6 +31,7 @@ export const Toast: React.FC<ToastProps> = ({
   onPress,
   onAnimationEnd,
   customView,
+  animationType = 'fade',
 }) => {
   const insets = useSafeAreaInsets();
   const systemTheme = useColorScheme();
@@ -48,35 +50,65 @@ export const Toast: React.FC<ToastProps> = ({
 
   useEffect(() => {
     if (isVisible) {
-      // Reset position instantly before starting the animation
-      translateY.value = position === 'top' ? -150 : 150;
-
-      opacity.value = withTiming(1, { duration: 300 });
-      translateY.value = withSpring(
-        0,
-        {
-          damping: 40,
-          stiffness: 250,
-        },
-        (finished) => {
+      if (animationType === 'fade') {
+        translateY.value = position === 'top' ? -20 : 20;
+        opacity.value = withTiming(1, { duration: 300 });
+        translateY.value = withTiming(0, { duration: 300 }, (finished) => {
           if (finished && onAnimationEnd) {
             runOnJS(onAnimationEnd)(true);
           }
-        }
-      );
-    } else {
-      opacity.value = withTiming(0, { duration: 300 });
-      translateY.value = withTiming(
-        position === 'top' ? -150 : 150,
-        { duration: 300 },
-        (finished) => {
+        });
+      } else if (animationType === 'slide') {
+        translateY.value = position === 'top' ? -150 : 150;
+        opacity.value = withTiming(1, { duration: 300 });
+        translateY.value = withTiming(0, { duration: 300 }, (finished) => {
           if (finished && onAnimationEnd) {
-            runOnJS(onAnimationEnd)(false);
+            runOnJS(onAnimationEnd)(true);
           }
-        }
-      );
+        });
+      } else {
+        // spring
+        translateY.value = position === 'top' ? -150 : 150;
+        opacity.value = withTiming(1, { duration: 300 });
+        translateY.value = withSpring(
+          0,
+          {
+            damping: 40,
+            stiffness: 250,
+          },
+          (finished) => {
+            if (finished && onAnimationEnd) {
+              runOnJS(onAnimationEnd)(true);
+            }
+          }
+        );
+      }
+    } else {
+      if (animationType === 'fade') {
+        opacity.value = withTiming(0, { duration: 300 });
+        translateY.value = withTiming(
+          position === 'top' ? -20 : 20,
+          { duration: 300 },
+          (finished) => {
+            if (finished && onAnimationEnd) {
+              runOnJS(onAnimationEnd)(false);
+            }
+          }
+        );
+      } else {
+        opacity.value = withTiming(0, { duration: 300 });
+        translateY.value = withTiming(
+          position === 'top' ? -150 : 150,
+          { duration: 300 },
+          (finished) => {
+            if (finished && onAnimationEnd) {
+              runOnJS(onAnimationEnd)(false);
+            }
+          }
+        );
+      }
     }
-  }, [isVisible, opacity, translateY, position, onAnimationEnd]);
+  }, [isVisible, opacity, translateY, position, onAnimationEnd, animationType]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -99,14 +131,13 @@ export const Toast: React.FC<ToastProps> = ({
     }
   };
 
-  const getContainerStyle = () => {
+  const getPositionStyle = () => {
     const isTop = position === 'top';
     return [
       styles.container,
       isTop
         ? { top: insets.top + topOffset }
         : { bottom: insets.bottom + bottomOffset },
-      animatedStyle,
     ] as any;
   };
 
@@ -124,30 +155,39 @@ export const Toast: React.FC<ToastProps> = ({
   ];
 
   return (
-    <Animated.View
-      // @ts-ignore - TS2589 bypass
-      style={getContainerStyle()}
+    <View
+      style={getPositionStyle()}
       pointerEvents={isVisible ? 'box-none' : 'none'}
     >
-      <TouchableOpacity
-        activeOpacity={0.9}
-        onPress={onPress}
-        disabled={!onPress}
-        style={customView ? styles.customContent : contentStyle}
+      <Animated.View
+        // @ts-ignore - TS2589 bypass
+        style={
+          [
+            ...(customView ? [styles.customContent] : contentStyle),
+            animatedStyle,
+          ] as any
+        }
       >
-        {customView ? (
-          customView
-        ) : (
-          <>
-            <View style={styles.iconContainer}>{getIcon()}</View>
-            <View style={styles.textContainer}>
-              {text1 && <Text style={text1Style}>{text1}</Text>}
-              {text2 && <Text style={text2Style}>{text2}</Text>}
-            </View>
-          </>
-        )}
-      </TouchableOpacity>
-    </Animated.View>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={onPress}
+          disabled={!onPress}
+          style={customView ? undefined : styles.touchableContent}
+        >
+          {customView ? (
+            customView
+          ) : (
+            <>
+              <View style={styles.iconContainer}>{getIcon()}</View>
+              <View style={styles.textContainer}>
+                {text1 && <Text style={text1Style}>{text1}</Text>}
+                {text2 && <Text style={text2Style}>{text2}</Text>}
+              </View>
+            </>
+          )}
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
   );
 };
 
@@ -164,24 +204,29 @@ const styles = StyleSheet.create({
     maxWidth: 400,
   },
   content: {
-    flexDirection: 'row',
     borderRadius: 12,
-    padding: 16,
     width: '100%',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
-    elevation: 5,
-    alignItems: 'center',
+    elevation: 10,
     maxWidth: 400,
+  },
+  touchableContent: {
+    flexDirection: 'row',
+    padding: 16,
+    alignItems: 'center',
+    width: '100%',
   },
   contentLight: {
     backgroundColor: '#ffffff',
-    shadowColor: '#000',
+    shadowColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.3)' : '#000',
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   contentDark: {
     backgroundColor: '#1f2937',
-    shadowColor: '#000',
+    shadowColor: Platform.OS === 'android' ? 'rgba(0,0,0,0.3)' : '#000',
     borderWidth: 1,
     borderColor: '#374151',
   },

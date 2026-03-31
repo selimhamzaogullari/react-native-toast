@@ -76,6 +76,32 @@ export default function App() {
             </View>
             <View style={styles.buttonWrapper}>
               <Button
+                title="Spring Animation"
+                onPress={() =>
+                  Toast.show({
+                    type: 'info',
+                    animationType: 'spring',
+                    text1: 'Spring Animation',
+                    text2: 'Bouncy and lively.',
+                  })
+                }
+              />
+            </View>
+            <View style={styles.buttonWrapper}>
+              <Button
+                title="Slide Animation"
+                onPress={() =>
+                  Toast.show({
+                    type: 'success',
+                    animationType: 'slide',
+                    text1: 'Slide Animation',
+                    text2: 'Linear and clean sliding.',
+                  })
+                }
+              />
+            </View>
+            <View style={styles.buttonWrapper}>
+              <Button
                 title="Custom View & Background"
                 color="#8b5cf6"
                 onPress={() =>
