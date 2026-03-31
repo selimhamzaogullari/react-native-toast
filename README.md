@@ -81,6 +81,7 @@ Toast.show({
 | `text2` | `string` | `undefined` | Secondary description |
 | `position` | `'top' \| 'bottom'` | `'top'` | Position of the toast |
 | `theme` | `'light' \| 'dark' \| 'system'` | `'system'` | Toast visual theme |
+| `animationType` | `'spring' \| 'slide' \| 'fade'` | `'fade'` | Animation style for enter/exit |
 | `visibilityTime` | `number` | `3000` | Duration in ms |
 | `topOffset` | `number` | `40` | Offset from top edge |
 | `bottomOffset` | `number` | `40` | Offset from bottom edge |
