@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   Platform,
+  PanResponder,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -32,6 +33,8 @@ export const Toast: React.FC<ToastProps> = ({
   onAnimationEnd,
   customView,
   animationType = 'fade',
+  swipeable = true,
+  onSwipeDismiss,
 }) => {
   const insets = useSafeAreaInsets();
   const systemTheme = useColorScheme();
@@ -47,6 +50,47 @@ export const Toast: React.FC<ToastProps> = ({
 
   const translateY = useSharedValue(position === 'top' ? -150 : 150);
   const opacity = useSharedValue(0);
+
+  const positionRef = useRef(position);
+  positionRef.current = position;
+
+  const swipeableRef = useRef(swipeable);
+  swipeableRef.current = swipeable;
+
+  const onSwipeDismissRef = useRef(onSwipeDismiss);
+  onSwipeDismissRef.current = onSwipeDismiss;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        if (!swipeableRef.current) return false;
+        // Only capture vertical swipes
+        return Math.abs(gestureState.dy) > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        const currentPos = positionRef.current;
+        // Drag in the dismissal direction only
+        if (currentPos === 'top' && gestureState.dy < 0) {
+          translateY.value = gestureState.dy;
+        } else if (currentPos === 'bottom' && gestureState.dy > 0) {
+          translateY.value = gestureState.dy;
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        const currentPos = positionRef.current;
+        const threshold = currentPos === 'top' ? -50 : 50;
+
+        if (
+          (currentPos === 'top' && gestureState.dy < threshold) ||
+          (currentPos === 'bottom' && gestureState.dy > threshold)
+        ) {
+          onSwipeDismissRef.current?.();
+        } else {
+          translateY.value = withSpring(0, { damping: 40, stiffness: 250 });
+        }
+      },
+    })
+  ).current;
 
   useEffect(() => {
     if (isVisible) {
@@ -154,20 +198,20 @@ export const Toast: React.FC<ToastProps> = ({
     isDark ? styles.text2Dark : styles.text2Light,
   ];
 
+  const animatedProps: any = {
+    ...panResponder.panHandlers,
+    style: [
+      ...(customView ? [styles.customContent] : contentStyle),
+      animatedStyle,
+    ],
+  };
+
   return (
     <View
       style={getPositionStyle()}
       pointerEvents={isVisible ? 'box-none' : 'none'}
     >
-      <Animated.View
-        // @ts-ignore - TS2589 bypass
-        style={
-          [
-            ...(customView ? [styles.customContent] : contentStyle),
-            animatedStyle,
-          ] as any
-        }
-      >
+      <Animated.View {...animatedProps}>
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={onPress}

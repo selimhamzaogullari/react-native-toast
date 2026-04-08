@@ -57,6 +57,11 @@ Toast.show({
 });
 ```
 
+### Swipe to Dismiss
+A pure, dependency-free **Swipe to Dismiss** logic is built directly into the core using React Native's Native `PanResponder` and seamlessly hooks into Reanimated. 
+- You can drag `top` toasts upwards and `bottom` toasts downwards to dismiss them early.
+- It is enabled by default. To disable it, simply pass `swipeable: false`.
+
 ### Dark Mode (Theme) Support
 `@selimh/react-native-toast` perfectly supports light and dark modes out of the box. 
 
@@ -86,6 +91,7 @@ Toast.show({
 | `topOffset` | `number` | `40` | Offset from top edge |
 | `bottomOffset` | `number` | `40` | Offset from bottom edge |
 | `autoHide` | `boolean` | `true` | If false, toast will not hide automatically |
+| `swipeable` | `boolean` | `true` | Enables Swipe to Dismiss natively using PanResponder |
 | `customView` | `React.ReactNode` | `undefined` | Render a completely custom component |
 | `onPress` | `() => void` | `undefined` | Called when toast is tapped |
 | `onShow` | `() => void` | `undefined` | Called when animation finishes showing |

@@ -166,6 +166,22 @@ export default function App() {
                 }
               />
             </View>
+            <View style={styles.buttonWrapper}>
+              <Button
+                title="Swipe To Dismiss"
+                color="#0ea5e9"
+                onPress={() =>
+                  Toast.show({
+                    type: 'info',
+                    text1: 'Swipe Me',
+                    text2: 'Drag me up to dismiss early!',
+                    position: 'bottom',
+                    swipeable: true, // true by default anyway
+                    autoHide: false, // so user has time to play with dragging
+                  })
+                }
+              />
+            </View>
           </View>
         </SafeAreaView>
       </ToastProvider>

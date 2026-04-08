@@ -48,6 +48,10 @@ export const ToastProvider = ({
     [options]
   );
 
+  const handleSwipeDismiss = useCallback(() => {
+    hide();
+  }, [hide]);
+
   return (
     <>
       {children}
@@ -56,6 +60,7 @@ export const ToastProvider = ({
         isVisible={isVisible}
         onAnimationEnd={onAnimationEnd}
         providerTheme={theme}
+        onSwipeDismiss={handleSwipeDismiss}
       />
     </>
   );

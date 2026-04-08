@@ -20,12 +20,14 @@ export interface ToastOptions {
   onShow?: () => void;
   onHide?: () => void;
   customView?: React.ReactNode;
+  swipeable?: boolean;
 }
 
 export interface ToastProps extends ToastOptions {
   isVisible: boolean;
   providerTheme?: ToastTheme;
   onAnimationEnd: (isVisible: boolean) => void;
+  onSwipeDismiss?: () => void;
 }
 
 export interface ToastProviderProps {
